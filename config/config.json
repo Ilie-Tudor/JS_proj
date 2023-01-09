@@ -1,4 +1,5 @@
 {
+  "comment":"this is an example. Please do not commit this file. Your db credentials should remain secret.",
   "development": {
     "username": "root",
     "password": "root",
