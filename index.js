@@ -2,6 +2,7 @@ const { sequelize } = require("./models");
 const express = require("express");
 const expressGraphQL = require("express-graphql").graphqlHTTP;
 const { GraphQLSchema, GraphQLObjectType } = require("graphql");
+
 const app = express();
 const {
   getUserById,
@@ -12,6 +13,7 @@ const {
   deleteUserById,
 } = require("./GraphQLRoutes/Users");
 
+const { login } = require('./GraphQLRoutes/Login');
 const RootQueryType = new GraphQLObjectType({
   name: "RootQuery",
   description: "Root Query",
@@ -19,6 +21,7 @@ const RootQueryType = new GraphQLObjectType({
     getUserById,
     getUserByName,
     getAllUsers,
+    login,
   }),
 });
 
