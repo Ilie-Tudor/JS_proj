@@ -24,7 +24,7 @@ module.exports = {
     },
     resolve: async (parent, args, context) => {
       const user = await User.findOne({ where: { user_name: args.user_name } });
-      return user;
+      return user.toJSON();
     }
   },
 

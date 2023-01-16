@@ -19,8 +19,8 @@ const {
   getAllCompanies,
   getCompanyByCompanyName,
   createCompany,
-  updateCompany,
-  deleteCompany
+  updateCompanyById,
+  deleteCompanyById
 } = require("./GraphQLRoutes/Companies");
 const {
   getCategoryById,
@@ -39,8 +39,8 @@ const RootQueryType = new GraphQLObjectType({
   description: "Root Query",
   fields: () => ({
     getUserById,
-    getUserByUserName,
     getAllUsers,
+    getUserByUserName,
 
     getCompanyById,
     getAllCompanies,
@@ -60,16 +60,16 @@ const RootMutationType = new GraphQLObjectType({
   name: "RootMutation",
   description: "Root Mutation",
   fields: () => ({
-    createUser, 
+    clientLogin,
+    companyLogin,
+
+    createUser,
     updateUserById,
     deleteUserById,
 
-    clientLogin,
-    companyLogin,
     createCompany,
-    updateCompany,
-    deleteCompany
-    
+    updateCompanyById,
+    deleteCompanyById
   })
 });
 
@@ -94,14 +94,12 @@ app.use(
     context: createContext(request)
   }))
 );
-// app.use("/", express.json());
-// app.use("/users", usersRoute);
 
 sequelize
   .authenticate()
   .then(() => {
     app.listen(5050, () => {
-      console.log("server started");
+      console.log("server started on port 5050");
     });
   })
   .catch(() => {
