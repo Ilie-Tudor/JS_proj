@@ -17,7 +17,10 @@ const {
 const {
   getCompanyById,
   getAllCompanies,
-  getCompanyByCompanyName
+  getCompanyByCompanyName,
+  createCompany,
+  updateCompany,
+  deleteCompany
 } = require("./GraphQLRoutes/Companies");
 const {
   getCategoryById,
@@ -30,7 +33,7 @@ const {
   getProductByProductName
 } = require("./GraphQLRoutes/Products");
 
-const { clientLogin } = require("./GraphQLRoutes/Login");
+const { clientLogin, companyLogin } = require("./GraphQLRoutes/Login");
 const RootQueryType = new GraphQLObjectType({
   name: "RootQuery",
   description: "Root Query",
@@ -38,7 +41,6 @@ const RootQueryType = new GraphQLObjectType({
     getUserById,
     getUserByUserName,
     getAllUsers,
-    clientLogin,
 
     getCompanyById,
     getAllCompanies,
@@ -58,9 +60,16 @@ const RootMutationType = new GraphQLObjectType({
   name: "RootMutation",
   description: "Root Mutation",
   fields: () => ({
-    createUser,
+    createUser, 
     updateUserById,
-    deleteUserById
+    deleteUserById,
+
+    clientLogin,
+    companyLogin,
+    createCompany,
+    updateCompany,
+    deleteCompany
+    
   })
 });
 
