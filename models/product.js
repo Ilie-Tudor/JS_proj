@@ -12,20 +12,21 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Company, { foreignKey: "company_id" });
       this.belongsTo(models.Product_Category, { foreignKey: "category_id" });
       this.belongsToMany(models.User, {
-        through: "Carts",
+        through: models.Cart,
         foreignKey: "product_id",
-        as: "cart",
+        as: "cart"
       });
       this.belongsToMany(models.User, {
         through: models.Review,
         foreignKey: "product_id",
-        as: "review",
+        as: "review"
       });
       this.belongsToMany(models.User, {
         through: models.Favorite,
         foreignKey: "product_id",
-        as: "favorite",
+        as: "favorite"
       });
+      this.hasMany(models.Review, { foreignKey: "product_id" });
     }
   }
   Product.init(
@@ -34,23 +35,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         primaryKey: true,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
+        defaultValue: DataTypes.UUIDV4
       },
       company_id: {
         type: DataTypes.UUID,
         primaryKey: true,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
+        defaultValue: DataTypes.UUIDV4
       },
       product_name: { type: DataTypes.STRING, allowNull: false },
       product_description: { type: DataTypes.TEXT, allowNull: false },
       specifications: { type: DataTypes.TEXT, allowNull: true },
       price: { type: DataTypes.INTEGER, allowNull: false },
-      category_id: { type: DataTypes.UUID, allowNull: true },
+      category_id: { type: DataTypes.UUID, allowNull: true }
     },
     {
       sequelize,
-      modelName: "Product",
+      modelName: "Product"
     }
   );
 

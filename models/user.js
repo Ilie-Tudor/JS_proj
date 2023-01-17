@@ -10,20 +10,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsToMany(models.Product, {
-        through: "Carts",
+        through: models.Cart,
         foreignKey: "user_id",
-        as: "cart",
+        as: "cart"
       });
       this.belongsToMany(models.Product, {
         through: models.Review,
         foreignKey: "user_id",
-        as: "review",
+        as: "review"
       });
       this.belongsToMany(models.Product, {
         through: models.Favorite,
         foreignKey: "user_id",
-        as: "favorite",
+        as: "favorite"
       });
+      this.hasMany(models.Review, { foreignKey: "user_id" });
     }
   }
   User.init(
@@ -32,36 +33,36 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
+        defaultValue: DataTypes.UUIDV4
       },
       user_name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       display_name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       address: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       postal_code: {
-        type: DataTypes.STRING,
-      },
+        type: DataTypes.STRING
+      }
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "User"
     }
   );
   return User;

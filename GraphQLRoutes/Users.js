@@ -1,10 +1,11 @@
-const { User } = require("../models");
+const { User, Favorite, Review, Cart } = require("../models");
 const { UserType } = require("../GraphQLTypes/UserType");
 const {
   GraphQLString,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLError
+  GraphQLError,
+  GraphQLInt
 } = require("graphql");
 const { ValidateToken, ValidateAuthorization } = require("../utils/auth");
 
@@ -135,6 +136,130 @@ module.exports = {
           }
         });
         return `Deleted ${deletedRowsCount} rows`;
+      } catch (err) {
+        return err;
+      }
+    }
+  },
+
+  addProductToFavoritesById: {
+    type: GraphQLString,
+    args: {
+      product_id: { type: GraphQLString }
+    },
+    resolve: async (parent, args, context) => {
+      const { error: authenticationError, userInfo } = ValidateToken(
+        context.jwt
+      );
+      if (authenticationError)
+        return new GraphQLError(
+          "Unauthenticated\n" + JSON.stringify(authenticationError),
+          { status: 401 }
+        );
+
+      const { isAuthorized } = ValidateAuthorization(
+        context.jwt,
+        "client_user"
+      );
+      if (!isAuthorized)
+        return new GraphQLError("Unauthorized", { status: 403 });
+
+      const { user_id } = userInfo;
+
+      try {
+        const [, created] = await Favorite.findOrCreate({
+          where: {
+            user_id: user_id,
+            product_id: args.product_id
+          }
+        });
+        return created
+          ? `Added the product to favorites`
+          : `The product exist in favorites allready`;
+      } catch (err) {
+        return err;
+      }
+    }
+  },
+
+  reviewProductById: {
+    type: GraphQLString,
+    args: {
+      product_id: { type: GraphQLString },
+      rating: { type: GraphQLInt },
+      review_summary: { type: GraphQLString },
+      content: { type: GraphQLString }
+    },
+    resolve: async (parent, args, context) => {
+      const { error: authenticationError, userInfo } = ValidateToken(
+        context.jwt
+      );
+      if (authenticationError)
+        return new GraphQLError(
+          "Unauthenticated\n" + JSON.stringify(authenticationError),
+          { status: 401 }
+        );
+
+      const { isAuthorized } = ValidateAuthorization(
+        context.jwt,
+        "client_user"
+      );
+      if (!isAuthorized)
+        return new GraphQLError("Unauthorized", { status: 403 });
+      const { user_id } = userInfo;
+
+      try {
+        const [, created] = await Review.findOrCreate({
+          where: {
+            user_id: user_id,
+            product_id: args.product_id
+          },
+          defaults: {
+            rating: args.rating,
+            review_summary: args.review_summary,
+            content: args.content
+          }
+        });
+        return created
+          ? `Added the review`
+          : `The product is allready reviewed`;
+      } catch (err) {
+        return err;
+      }
+    }
+  },
+
+  addProductToCartById: {
+    type: GraphQLString,
+    args: {
+      product_id: { type: GraphQLString }
+    },
+    resolve: async (parent, args, context) => {
+      const { error: authenticationError, userInfo } = ValidateToken(
+        context.jwt
+      );
+      if (authenticationError)
+        return new GraphQLError(
+          "Unauthenticated\n" + JSON.stringify(authenticationError),
+          { status: 401 }
+        );
+
+      const { isAuthorized } = ValidateAuthorization(
+        context.jwt,
+        "client_user"
+      );
+      if (!isAuthorized)
+        return new GraphQLError("Unauthorized", { status: 403 });
+      const { user_id } = userInfo;
+
+      try {
+        const [, created] = await Cart.findOrCreate({
+          where: {
+            user_id: user_id,
+            product_id: args.product_id
+          }
+        });
+        return created ? `Added to cart` : `Allready in cart`;
       } catch (err) {
         return err;
       }

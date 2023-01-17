@@ -1,5 +1,16 @@
-const { GraphQLObjectType, GraphQLString, GraphQLInt } = require("graphql");
-const { Product_Category, Company } = require("../models");
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLList
+} = require("graphql");
+const {
+  Product_Category,
+  Company,
+  User,
+  Product,
+  Review
+} = require("../models");
 
 module.exports.ProductType = new GraphQLObjectType({
   name: "Product",
@@ -43,8 +54,30 @@ module.exports.ProductType = new GraphQLObjectType({
           where: { company_id: parent.company_id }
         });
       }
+    },
+    favoring_users: {
+      type: new GraphQLList(UserType),
+      resolve: async (parent, args, context) => {
+        const products = await Product.findOne({
+          include: { model: User, as: "favorite" },
+          where: { product_id: parent.product_id }
+        });
+        return products.favorite;
+      }
+    },
+    product_reviews: {
+      type: new GraphQLList(ReviewType),
+      resolve: async (parent, args, context) => {
+        const product = await Product.findOne({
+          where: { product_id: parent.product_id },
+          include: { model: Review, include: [Product, User] }
+        });
+        return product.Reviews;
+      }
     }
   })
 });
 const { ProductCategoryType } = require("./ProductCategoryType");
 const { CompanyType } = require("./CompanyType");
+const { UserType } = require("./UserType");
+const { ReviewType } = require("./ReviewType");

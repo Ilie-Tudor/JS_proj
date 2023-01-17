@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLString, GraphQLList } = require("graphql");
-const { Product, User } = require("../models");
+const { Product, User, Review } = require("../models");
 module.exports.UserType = new GraphQLObjectType({
   name: "User",
   description: "This is an user of the application",
@@ -45,8 +45,19 @@ module.exports.UserType = new GraphQLObjectType({
         });
         return users.favorite;
       }
+    },
+    user_reviews: {
+      type: new GraphQLList(ReviewType),
+      resolve: async (parent, args, context) => {
+        const user = await User.findOne({
+          where: { user_id: parent.user_id },
+          include: { model: Review, include: [Product, User] }
+        });
+        return user.Reviews;
+      }
     }
   })
 });
 
 const { ProductType } = require("./ProductType");
+const { ReviewType } = require("./ReviewType");

@@ -12,7 +12,10 @@ const {
   getAllUsers,
   createUser,
   updateUserById,
-  deleteUserById
+  deleteUserById,
+  addProductToFavoritesById,
+  reviewProductById,
+  addProductToCartById
 } = require("./GraphQLRoutes/Users");
 const {
   getCompanyById,
@@ -66,6 +69,9 @@ const RootMutationType = new GraphQLObjectType({
     createUser,
     updateUserById,
     deleteUserById,
+    addProductToFavoritesById,
+    reviewProductById,
+    addProductToCartById,
 
     createCompany,
     updateCompanyById,
