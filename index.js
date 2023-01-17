@@ -33,7 +33,9 @@ const {
 const {
   getProductById,
   getAllProducts,
-  getProductByProductName
+  getProductByProductName,
+  addProduct,
+  deleteProductById
 } = require("./GraphQLRoutes/Products");
 
 const { clientLogin, companyLogin } = require("./GraphQLRoutes/Login");
@@ -75,7 +77,9 @@ const RootMutationType = new GraphQLObjectType({
 
     createCompany,
     updateCompanyById,
-    deleteCompanyById
+    deleteCompanyById,
+    addProduct,
+    deleteProductById
   })
 });
 
