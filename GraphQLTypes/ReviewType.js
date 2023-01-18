@@ -1,10 +1,4 @@
-const {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt
-} = require("graphql");
-const { Product, User } = require("../models");
+const { GraphQLObjectType, GraphQLString, GraphQLInt } = require("graphql");
 module.exports.ReviewType = new GraphQLObjectType({
   name: "Review",
   description: "This is a review of the application",
