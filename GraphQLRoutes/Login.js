@@ -34,7 +34,7 @@ module.exports = {
         }
       } catch (err) {
         console.error(err);
-        return "Eroare";
+        return "Eroare " + err;
       }
     }
   },
@@ -45,7 +45,7 @@ module.exports = {
       company_token: { type: GraphQLString },
       password: { type: GraphQLString }
     },
-    resolve: async(parent, args) => {
+    resolve: async (parent, args) => {
       try {
         const company = await Company.findOne({
           where: {
@@ -70,7 +70,7 @@ module.exports = {
         }
       } catch (err) {
         console.error(err);
-        return "Eroare";
+        return "Eroare " + err;
       }
     }
   }
