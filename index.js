@@ -95,6 +95,7 @@ const createContext = (req) => {
     payload: jwt.decode(req.headers.token)
   };
 };
+
 app.use(
   "/graphql",
   express.json(),
@@ -105,11 +106,13 @@ app.use(
   }))
 );
 
+const PORT = process.env.port | 5050;
+
 sequelize
   .authenticate()
   .then(() => {
-    app.listen(5050, () => {
-      console.log("server started on port 5050");
+    app.listen(PORT, () => {
+      console.log(`server started on port ${PORT}`);
     });
   })
   .catch(() => {
